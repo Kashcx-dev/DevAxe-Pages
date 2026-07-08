@@ -17,11 +17,13 @@ const Hero = () => {
               Join Discord
             </button>
           </a>
-          <a href="#" target="_blank" rel="noopener noreferrer">
-            <button className="cyber-btn">
-              Submit Project
-            </button>
-          </a>
+          <span title='"Ponder and deliberate before you make a move." - Sun Tzu. The submission portal is not yet open.' style={{ display: 'inline-block', cursor: 'not-allowed' }}>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSeg3s6rrF5-i_pi4AO0iipwlx9PIr5IiKbBtHhGRh6dqjg4yA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" style={{ pointerEvents: 'none' }}>
+              <button className="cyber-btn ghosted-btn" disabled>
+                Submit Project
+              </button>
+            </a>
+          </span>
         </div>
       </div>
     </section>
