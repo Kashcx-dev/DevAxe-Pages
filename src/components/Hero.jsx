@@ -17,6 +17,11 @@ const Hero = () => {
               Join Discord
             </button>
           </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            <button className="cyber-btn">
+              Submit Project
+            </button>
+          </a>
         </div>
       </div>
     </section>

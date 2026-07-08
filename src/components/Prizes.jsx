@@ -7,19 +7,23 @@ const Prizes = () => {
       <div className="prizes-grid">
         <div className="glass-panel prize-card">
           <h3 className="prize-title">1ST PLACE</h3>
-          <p className="prize-amount">$5,000</p>
+          <p className="prize-amount">$420</p>
           <p>+ Sponsor Swag & Cloud Credits</p>
         </div>
         <div className="glass-panel prize-card">
           <h3 className="prize-title">2ND PLACE</h3>
-          <p className="prize-amount">$2,500</p>
+          <p className="prize-amount">$240</p>
           <p>+ Sponsor Swag & Cloud Credits</p>
         </div>
         <div className="glass-panel prize-card">
           <h3 className="prize-title">3RD PLACE</h3>
-          <p className="prize-amount">$1,000</p>
+          <p className="prize-amount">$120</p>
           <p>+ Sponsor Swag</p>
         </div>
+      </div>
+      <div className="glass-panel text-center" style={{ marginTop: '40px', borderColor: 'var(--neon-cyan)' }}>
+        <h3 style={{ color: 'var(--neon-cyan)', marginBottom: '10px' }}>// DIRECTIVES: CAREER</h3>
+        <p>Top contenders will have an exclusive opportunity to interview with our sponsors for potential roles.</p>
       </div>
     </section>
   );
