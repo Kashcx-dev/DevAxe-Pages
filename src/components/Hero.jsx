@@ -10,7 +10,12 @@ const Hero = () => {
         <div className="hero-buttons">
           <a href="https://forms.gle/gxRWhgTK7juZUnqF6" target="_blank" rel="noopener noreferrer">
             <button className="cyber-btn cyber-btn-primary">
-              Register Now
+              Hack Track
+            </button>
+          </a>
+          <a href="https://forms.gle/gxRWhgTK7juZUnqF6" target="_blank" rel="noopener noreferrer">
+            <button className="cyber-btn cyber-btn-primary">
+              Source Track
             </button>
           </a>
           <a href="https://discord.gg/Pp6y3Xtu6Z" target="_blank" rel="noopener noreferrer">
