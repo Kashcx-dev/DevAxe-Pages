@@ -217,6 +217,30 @@ section {
   font-family: var(--font-display);
 }
 
+/* TRACKS */
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+.track-card {
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.track-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+.track-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-family: var(--font-display);
+}
+
 /* PRIZES */
 .prizes-grid {
   display: grid;

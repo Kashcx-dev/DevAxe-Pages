@@ -1,6 +1,7 @@
 import React from 'react';
 import Hero from './components/Hero';
 import About from './components/About';
+import Tracks from './components/Tracks';
 import Schedule from './components/Schedule';
 import Prizes from './components/Prizes';
 import Sponsors from './components/Sponsors';
@@ -25,6 +26,7 @@ function App() {
 
       <main>
         <Hero />
+        <Tracks />
         <About />
         <Schedule />
         <Prizes />
