@@ -3,6 +3,7 @@ import React from 'react';
 const Hero = () => {
   return (
     <section id="hero" className="hero-section">
+      <img src="/DevAxe.png" alt="DevAxe Background Logo" className="hero-logo-watermark" />
       <div className="hero-content">
         <h1 className="glitch-text title" data-text="DEVAXE HACKS">DEVAXE HACKS</h1>
         <p className="subtitle">Build the future. Break the rules.</p>
