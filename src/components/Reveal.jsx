@@ -8,9 +8,11 @@ const Reveal = ({ children }) => {
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
-          // Once visible, keep it visible to avoid stuttering on rapid scroll
+          // Toggle visibility so the animation repeats every time you scroll past it
           if (entry.isIntersecting) {
             setIsVisible(true);
+          } else {
+            setIsVisible(false);
           }
         });
       },

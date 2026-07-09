@@ -23,6 +23,7 @@ function App() {
           <img src="/DevAxe.png" alt="DevAxe Hacks Logo" className="logo-img" />
         </div>
         <ul className="nav-links">
+          <li><a href="#">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#schedule">Schedule</a></li>
           <li><a href="#prizes">Prizes</a></li>
