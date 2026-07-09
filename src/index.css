@@ -29,6 +29,11 @@ body {
   font-family: var(--font-main);
   overflow-x: hidden;
   line-height: 1.6;
+  cursor: url('/cursor.png'), auto;
+}
+
+a, button {
+  cursor: url('/cursor.png'), pointer !important;
 }
 
 h1, h2, h3, h4, h5, h6 {
