@@ -7,7 +7,7 @@ const FAQs = () => {
     { q: "Who can participate?", a: "Anyone! Whether you're a student, professional, or self-taught developer." },
     { q: "How much does it cost?", a: "It's 100% free to attend, thanks to our amazing sponsors." },
     { q: "Do I need a team?", a: "You can hack solo or in a team of up to 4. We will have team-building events on Discord if you need to find one!" },
-    { q: "What if I don't know how to code?", a: "We have dedicated beginner workshops, mentors, and open-source tracks designed specifically for learning." }
+    { q: "What if I don't know how to code?", a: "We have dedicated mentors and open-source tracks designed specifically for learning." }
   ];
 
   const toggleAccordion = (index) => {
