@@ -2,21 +2,27 @@ import React, { useRef, useState, useEffect } from 'react';
 
 const AudioPlayer = ({ onPlayStateChange }) => {
   const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
 
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = 0.4; // Increased volume as requested
+      // Attempt to auto-play
+      audioRef.current.play().catch(e => {
+        console.log("Audio play blocked by browser:", e);
+        // If blocked by browser policy, revert to paused state visually
+        setIsPlaying(false);
+        if (onPlayStateChange) onPlayStateChange(false);
+      });
     }
-  }, []);
+  }, [onPlayStateChange]);
 
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        // Handle promise in case browser blocks autoplay
-        audioRef.current.play().catch(e => console.log("Audio play blocked by browser:", e));
+        audioRef.current.play().catch(e => console.log(e));
       }
       
       setIsPlaying(!isPlaying);

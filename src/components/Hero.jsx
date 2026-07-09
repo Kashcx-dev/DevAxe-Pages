@@ -1,5 +1,6 @@
 import React from 'react';
 import Tilt from 'react-parallax-tilt';
+import Countdown from './Countdown';
 
 const Hero = () => {
   return (
@@ -9,6 +10,9 @@ const Hero = () => {
         <div className="hero-content">
           <h1 className="glitch-text title" data-text="DEVAXE HACKS">DEVAXE HACKS</h1>
           <p className="subtitle">Build the future. Break the rules.</p>
+          
+          <Countdown targetDate="2026-10-18T00:00:00" />
+          
           <div className="hero-buttons">
             <a href="#tracks">
               <button className="cyber-btn cyber-btn-primary">
@@ -28,6 +32,9 @@ const Hero = () => {
               </a>
             </span>
           </div>
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: '0.85rem', color: 'rgba(255,255,255,0.3)', marginTop: '40px', letterSpacing: '1px' }}>
+            [ SYSTEM MSG: Press ` to access mainframe ]
+          </p>
         </div>
       </Tilt>
     </section>
