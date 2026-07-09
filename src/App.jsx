@@ -8,8 +8,6 @@ import Sponsors from './components/Sponsors';
 import FAQs from './components/FAQs';
 import Reveal from './components/Reveal';
 import AudioPlayer from './components/AudioPlayer';
-import AudioVibe from './components/AudioVibe';
-import CustomCursor from './components/CustomCursor';
 import './index.css';
 
 function App() {
@@ -17,8 +15,6 @@ function App() {
 
   return (
     <div className="app-container">
-      <CustomCursor />
-      <AudioVibe isPlaying={isMusicPlaying} />
       <AudioPlayer onPlayStateChange={setIsMusicPlaying} />
       <nav className="navbar">
         <div className="logo-container">
