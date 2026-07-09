@@ -123,8 +123,8 @@ a {
   position: relative;
 }
 .hero-logo-watermark {
-  position: absolute;
-  top: 35%;
+  position: fixed;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 35vw;
@@ -345,11 +345,11 @@ footer {
 /* REVEAL ANIMATION */
 .reveal-wrapper {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-  will-change: opacity, visibility;
+  transform: translateY(60px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
 }
 .reveal-wrapper.is-visible {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
 }
