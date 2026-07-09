@@ -45,7 +45,7 @@ const Terminal = () => {
         window.open('https://forms.gle/gxRWhgTK7juZUnqF6', '_blank');
       } else if (cmd === '2') {
         newHistory.push({ type: 'output', text: 'Initializing Source Track registration...' });
-        window.open('https://forms.gle/gxRWhgTK7juZUnqF6', '_blank');
+        window.open('https://forms.gle/KGRS1m686JDzebt76', '_blank');
       } else {
         newHistory.push({ type: 'output', text: 'Invalid selection. Registration aborted.' });
       }
