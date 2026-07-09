@@ -313,3 +313,20 @@ footer {
   .hero-content .title { font-size: 3rem; }
   .hero-buttons { flex-direction: column; }
 }
+
+/* SCROLL PROGRESS LINE */
+.scroll-line-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 9999;
+}
+.scroll-line {
+  width: 100%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 15px var(--neon-cyan), 0 0 5px var(--neon-cyan);
+  transition: height 0.1s ease-out;
+}
