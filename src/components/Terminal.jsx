@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 const Terminal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
+  const [awaitingInput, setAwaitingInput] = useState(null);
   const [history, setHistory] = useState([
     { type: 'output', text: 'DevAxe OS v1.0.0 initialized.' },
     { type: 'output', text: 'Type "help" for a list of available commands.' }
@@ -35,26 +36,43 @@ const Terminal = () => {
     if (!input.trim()) return;
 
     const cmd = input.trim().toLowerCase();
-    const newHistory = [...history, { type: 'input', text: `root@devaxe:~# ${input}` }];
+    const promptText = awaitingInput === 'register' ? 'Track Selection [1/2]:' : 'root@devaxe:~#';
+    const newHistory = [...history, { type: 'input', text: `${promptText} ${input}` }];
     
-    if (cmd === 'help') {
-      newHistory.push({ type: 'output', text: 'Available commands: help, about, register, clear, sudo rm -rf /' });
-    } else if (cmd === 'about') {
-      newHistory.push({ type: 'output', text: 'DevAxe Hacks: 48-hour intense digital attrition. Build the future.' });
-    } else if (cmd === 'register') {
-      newHistory.push({ type: 'output', text: 'Registration portal is currently locked. Check back soon.' });
-    } else if (cmd === 'clear') {
-      setHistory([]);
-      setInput('');
-      return;
-    } else if (cmd === 'sudo rm -rf /') {
-      newHistory.push({ type: 'output', text: 'CRITICAL WARNING: INITIATING SYSTEM PURGE...', color: 'var(--neon-pink)' });
-      setTimeout(() => {
-        document.body.style.animation = 'glitch-anim 0.2s infinite';
-        setTimeout(() => document.body.style.animation = '', 2000);
-      }, 500);
+    if (awaitingInput === 'register') {
+      if (cmd === '1') {
+        newHistory.push({ type: 'output', text: 'Initializing Hack Track registration...' });
+        window.open('https://forms.gle/gxRWhgTK7juZUnqF6', '_blank');
+      } else if (cmd === '2') {
+        newHistory.push({ type: 'output', text: 'Initializing Source Track registration...' });
+        window.open('https://forms.gle/gxRWhgTK7juZUnqF6', '_blank');
+      } else {
+        newHistory.push({ type: 'output', text: 'Invalid selection. Registration aborted.' });
+      }
+      setAwaitingInput(null);
     } else {
-      newHistory.push({ type: 'output', text: `Command not found: ${cmd}` });
+      if (cmd === 'help') {
+        newHistory.push({ type: 'output', text: 'Available commands: help, about, register, clear, sudo rm -rf /' });
+      } else if (cmd === 'about') {
+        newHistory.push({ type: 'output', text: 'DevAxe Hacks: 48-hour intense digital attrition. Build the future.' });
+      } else if (cmd === 'register') {
+        newHistory.push({ type: 'output', text: 'Select a track for registration:' });
+        newHistory.push({ type: 'output', text: '[1] Hack Track' });
+        newHistory.push({ type: 'output', text: '[2] Source Track' });
+        setAwaitingInput('register');
+      } else if (cmd === 'clear') {
+        setHistory([]);
+        setInput('');
+        return;
+      } else if (cmd === 'sudo rm -rf /') {
+        newHistory.push({ type: 'output', text: 'CRITICAL WARNING: INITIATING SYSTEM PURGE...', color: 'var(--neon-pink)' });
+        setTimeout(() => {
+          document.body.style.animation = 'glitch-anim 0.2s infinite';
+          setTimeout(() => document.body.style.animation = '', 2000);
+        }, 500);
+      } else {
+        newHistory.push({ type: 'output', text: `Command not found: ${cmd}` });
+      }
     }
 
     setHistory(newHistory);
@@ -86,7 +104,9 @@ const Terminal = () => {
       </div>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', marginTop: '10px' }}>
-        <span style={{ color: '#fff', marginRight: '10px' }}>root@devaxe:~#</span>
+        <span style={{ color: '#fff', marginRight: '10px' }}>
+          {awaitingInput === 'register' ? 'Track Selection [1/2]:' : 'root@devaxe:~#'}
+        </span>
         <input 
           ref={inputRef}
           value={input}
