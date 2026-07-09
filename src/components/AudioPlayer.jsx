@@ -6,7 +6,7 @@ const AudioPlayer = ({ onPlayStateChange }) => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = 0.15; // Kept the volume low as requested
+      audioRef.current.volume = 0.4; // Increased volume as requested
     }
   }, []);
 

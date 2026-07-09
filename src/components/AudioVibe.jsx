@@ -12,7 +12,7 @@ const AudioVibe = ({ isPlaying }) => {
       width: '100vw',
       height: '100vh',
       pointerEvents: 'none',
-      zIndex: 0, // Sits right behind the text but above the background
+      zIndex: 9998, // Sits above all content but below the cursor/audio button, overlaying the site smoothly
       background: 'radial-gradient(circle at center, rgba(176, 38, 255, 0.12) 0%, transparent 60%)',
       animation: 'vibe-pulse 2s infinite alternate ease-in-out',
       mixBlendMode: 'screen'
