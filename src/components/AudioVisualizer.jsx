@@ -136,22 +136,28 @@ const BassPulseOverlay = ({ analyser, isPlaying }) => {
     }
 
     const dataArray = new Uint8Array(analyser.frequencyBinCount);
+    let smoothBass = 0;
+
+    const lerp = (a, b, t) => a + (b - a) * t;
 
     const animate = () => {
       analyser.getByteFrequencyData(dataArray);
 
       // Focus on bass frequencies (first 10 bins)
-      let bass = 0;
+      let rawBass = 0;
       for (let i = 0; i < 10; i++) {
-        bass += dataArray[i];
+        rawBass += dataArray[i];
       }
-      bass = bass / (10 * 255);
+      rawBass = rawBass / (10 * 255);
+
+      // Smooth interpolation
+      smoothBass = lerp(smoothBass, rawBass, 0.1);
 
       if (overlayRef.current) {
         // Subtle vignette pulse on bass hits
-        const intensity = Math.pow(bass, 1.5) * 0.15;
+        const intensity = Math.pow(smoothBass, 1.5) * 0.15;
         overlayRef.current.style.opacity = String(intensity);
-        overlayRef.current.style.boxShadow = `inset 0 0 ${100 + bass * 200}px ${40 + bass * 80}px rgba(0, 243, 255, ${intensity * 0.5}), inset 0 0 ${60 + bass * 120}px ${20 + bass * 40}px rgba(255, 0, 127, ${intensity * 0.3})`;
+        overlayRef.current.style.boxShadow = `inset 0 0 ${100 + smoothBass * 200}px ${40 + smoothBass * 80}px rgba(0, 243, 255, ${intensity * 0.5}), inset 0 0 ${60 + smoothBass * 120}px ${20 + smoothBass * 40}px rgba(255, 0, 127, ${intensity * 0.3})`;
       }
 
       rafRef.current = requestAnimationFrame(animate);

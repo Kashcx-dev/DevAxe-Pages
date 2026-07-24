@@ -58,6 +58,19 @@ const ParticleNetwork = ({ analyser, isMusicPlaying }) => {
 
     let time = 0;
 
+    // Smoothed audio values — lerped each frame for butter-smooth transitions
+    let smoothBass = 0;
+    let smoothMid = 0;
+    let smoothEnergy = 0;
+    let smoothConnectionDist = CONNECTION_DISTANCE;
+    let smoothLineWidth = 0.5;
+    let smoothGlowMultiplier = 3;
+
+    const LERP_SPEED = 0.08; // How fast values interpolate (0.01=very slow, 0.2=fast)
+    const LERP_FAST = 0.12;  // Slightly faster for things that should be snappier
+
+    const lerp = (current, target, speed) => current + (target - current) * speed;
+
     const animate = () => {
       time += 0.01;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -65,10 +78,10 @@ const ParticleNetwork = ({ analyser, isMusicPlaying }) => {
       const particles = particlesRef.current;
       const mouse = mouseRef.current;
 
-      // Audio reactivity
-      let bassLevel = 0;
-      let midLevel = 0;
-      let audioEnergy = 0;
+      // Raw audio reactivity
+      let rawBass = 0;
+      let rawMid = 0;
+      let rawEnergy = 0;
       
       if (analyser && isMusicPlaying) {
         const dataArray = new Uint8Array(analyser.frequencyBinCount);
@@ -76,25 +89,37 @@ const ParticleNetwork = ({ analyser, isMusicPlaying }) => {
         
         // Bass (first 10 bins)
         for (let i = 0; i < 10; i++) {
-          bassLevel += dataArray[i];
+          rawBass += dataArray[i];
         }
-        bassLevel = bassLevel / (10 * 255);
+        rawBass = rawBass / (10 * 255);
 
         // Mids (bins 10-40)
         for (let i = 10; i < 40; i++) {
-          midLevel += dataArray[i];
+          rawMid += dataArray[i];
         }
-        midLevel = midLevel / (30 * 255);
+        rawMid = rawMid / (30 * 255);
 
         // Overall energy
         for (let i = 0; i < dataArray.length; i++) {
-          audioEnergy += dataArray[i];
+          rawEnergy += dataArray[i];
         }
-        audioEnergy = audioEnergy / (dataArray.length * 255);
+        rawEnergy = rawEnergy / (dataArray.length * 255);
       }
 
-      // Audio-reactive connection distance
-      const dynamicConnectionDist = CONNECTION_DISTANCE + bassLevel * 80;
+      // Interpolate all audio values smoothly
+      smoothBass = lerp(smoothBass, rawBass, LERP_SPEED);
+      smoothMid = lerp(smoothMid, rawMid, LERP_SPEED);
+      smoothEnergy = lerp(smoothEnergy, rawEnergy, LERP_SPEED);
+
+      // Interpolate derived values
+      const targetConnectionDist = CONNECTION_DISTANCE + rawBass * 80;
+      smoothConnectionDist = lerp(smoothConnectionDist, targetConnectionDist, LERP_SPEED);
+
+      const targetLineWidth = 0.5 + rawBass * 1.5;
+      smoothLineWidth = lerp(smoothLineWidth, targetLineWidth, LERP_SPEED);
+
+      const targetGlowMultiplier = 3 + rawBass * 4;
+      smoothGlowMultiplier = lerp(smoothGlowMultiplier, targetGlowMultiplier, LERP_SPEED);
 
       // Update and draw particles
       for (let i = 0; i < particles.length; i++) {
@@ -111,14 +136,15 @@ const ParticleNetwork = ({ analyser, isMusicPlaying }) => {
           p.vy -= Math.sin(angle) * force * 0.3;
         }
 
-        // Audio reactivity — particles jitter/pulse with bass
-        if (bassLevel > 0.15) {
-          p.vx += (Math.random() - 0.5) * bassLevel * 1.2;
-          p.vy += (Math.random() - 0.5) * bassLevel * 1.2;
+        // Audio reactivity — smooth jitter with interpolated bass
+        if (smoothBass > 0.15) {
+          p.vx += (Math.random() - 0.5) * smoothBass * 1.2;
+          p.vy += (Math.random() - 0.5) * smoothBass * 1.2;
         }
 
-        // Audio-reactive radius
-        p.radius = p.baseRadius + bassLevel * 3 + midLevel * 1.5;
+        // Audio-reactive radius — lerp towards target instead of snapping
+        const targetRadius = p.baseRadius + smoothBass * 3 + smoothMid * 1.5;
+        p.radius = lerp(p.radius, targetRadius, LERP_FAST);
 
         // Apply velocity with damping
         p.vx *= 0.98;
@@ -132,8 +158,8 @@ const ParticleNetwork = ({ analyser, isMusicPlaying }) => {
         if (p.y < -10) p.y = canvas.height + 10;
         if (p.y > canvas.height + 10) p.y = -10;
 
-        // Pulsing alpha — enhanced by audio
-        const audioAlphaBoost = audioEnergy * 0.3;
+        // Pulsing alpha — enhanced by smoothed audio
+        const audioAlphaBoost = smoothEnergy * 0.3;
         const alpha = p.baseAlpha + Math.sin(time * 2 + p.pulseOffset) * 0.15 + audioAlphaBoost;
 
         // Draw particle
@@ -142,27 +168,26 @@ const ParticleNetwork = ({ analyser, isMusicPlaying }) => {
         ctx.fillStyle = p.color + Math.min(alpha, 1) + ')';
         ctx.fill();
 
-        // Glow — enhanced by music
-        const glowMultiplier = 3 + bassLevel * 4;
+        // Glow — smoothly interpolated
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * glowMultiplier, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.radius * smoothGlowMultiplier, 0, Math.PI * 2);
         ctx.fillStyle = p.color + (Math.min(alpha, 1) * 0.15) + ')';
         ctx.fill();
 
-        // Draw connections
+        // Draw connections — smoothed distance and width
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const cdx = p.x - p2.x;
           const cdy = p.y - p2.y;
           const cdist = Math.sqrt(cdx * cdx + cdy * cdy);
 
-          if (cdist < dynamicConnectionDist) {
-            const lineAlpha = (1 - cdist / dynamicConnectionDist) * (0.25 + audioEnergy * 0.3);
+          if (cdist < smoothConnectionDist) {
+            const lineAlpha = (1 - cdist / smoothConnectionDist) * (0.25 + smoothEnergy * 0.3);
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = `rgba(0, 243, 255, ${lineAlpha})`;
-            ctx.lineWidth = 0.5 + bassLevel * 1.5;
+            ctx.lineWidth = smoothLineWidth;
             ctx.stroke();
           }
         }
